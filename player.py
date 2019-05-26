@@ -1,18 +1,46 @@
-import os
-import pandas as pd
+from vlc import MediaPlayer
 from tkinter import  *
 from tkinter import filedialog
-from PIL import Image
+from os import listdir
+from os.path import  join
+
+window=Tk()
+
+index=0
+onlyfiles=[""]
+song_name=StringVar()
+song_name.set('Select the Folder to Play using browser')
 
 def browser():
     global file_dir
+    global onlyfiles
+    global player
+    onlyfiles=[""]
     file_dir=filedialog.askdirectory()
+    player.stop()
+    onlyfiles = [f for f in listdir(file_dir) if f.endswith('.mp3')]
+    start()
+player=MediaPlayer(onlyfiles[index])
+def start():
+    global index
+    global player
+    global song_name
+    song_name.set(onlyfiles[index][:-4])
+    player=MediaPlayer(join(file_dir,onlyfiles[index]))
+    player.play()
+def next():
+    global index
+    global player
+    player.stop()
+    index+=1
+    start()
+def prev():
+    global index
+    global player
+    player.stop()
+    index+=1
+    start()
 
-
-
-
-
-window=Tk()
 window.title("MP3 Player")
 window.configure(background="black")
 window.geometry("600x400")
@@ -22,7 +50,7 @@ topFrame.pack(side=TOP)
 bottomFrame=Frame(window)
 bottomFrame.pack(side=BOTTOM)
 #Top Music Informations
-label=Label(topFrame,text="Lose Yourself - Eminem",fg='grey',bg='black',font='Roboto')
+label=Label(topFrame,textvariable=song_name,fg='grey',bg='black',font='Roboto')
 label.pack()
 browse_button=Button(topFrame,text='Browse',font='Roboto',fg='grey',bg='black',command=browser)
 browse_button.pack()
@@ -33,9 +61,9 @@ playPh = PhotoImage(file='C:\\Users\\JAYATV\\PycharmProjects\\MusicPlayer\\Image
 nextPh = PhotoImage(file='C:\\Users\\JAYATV\\PycharmProjects\\MusicPlayer\\Images\\forward.png')
 prevPh = PhotoImage(file='C:\\Users\\JAYATV\\PycharmProjects\\MusicPlayer\\Images\\rewind.png')
 
-button1=Button(bottomFrame,image=prevPh,bg='black',height=80,width=80)
-button2=Button(bottomFrame,image=playPh,bg='black',height=80,width=80)
-button3=Button(bottomFrame,image=nextPh,bg='black',height=80,width=80)
+button1=Button(bottomFrame,image=prevPh,bg='black',height=80,width=80,command=prev)
+button2=Button(bottomFrame,image=playPh,bg='black',height=80,width=80,command=start)
+button3=Button(bottomFrame,image=nextPh,bg='black',height=80,width=80,command=next)
 button1.image=prevPh
 button2.image=playPh
 button3.image=nextPh
