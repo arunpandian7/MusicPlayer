@@ -9,7 +9,7 @@ window=Tk()
 index=0
 onlyfiles=[""]
 song_name=StringVar()
-song_name.set('Select the Folder to Play using browser')
+song_name.set('Choose a folder')
 
 def browser():
     global file_dir
@@ -43,7 +43,7 @@ def prev():
 
 window.title("MP3 Player")
 window.configure(background="black")
-window.geometry("600x400")
+window.geometry("300x200")
 
 topFrame=Frame(window)
 topFrame.pack(side=TOP)
@@ -51,19 +51,20 @@ bottomFrame=Frame(window)
 bottomFrame.pack(side=BOTTOM)
 #Top Music Informations
 label=Label(topFrame,textvariable=song_name,fg='grey',bg='black',font='Roboto')
+label.configure(font=('Roboto','24'),width=300)
 label.pack()
-browse_button=Button(topFrame,text='Browse',font='Roboto',fg='grey',bg='black',command=browser)
-browse_button.pack()
+browse_button=Button(topFrame,text='Browse',font='Roboto',fg='#2ECC71',bg='black',command=browser)
+browse_button.pack(fill=X)
 
 
 #Media Button layout and design
-playPh = PhotoImage(file='C:\\Users\\JAYATV\\PycharmProjects\\MusicPlayer\\Images\\icons8-play-96.png')
-nextPh = PhotoImage(file='C:\\Users\\JAYATV\\PycharmProjects\\MusicPlayer\\Images\\forward.png')
-prevPh = PhotoImage(file='C:\\Users\\JAYATV\\PycharmProjects\\MusicPlayer\\Images\\rewind.png')
+playPh = PhotoImage(file='C:\\Users\\JAYATV\\PycharmProjects\\MusicPlayer\\Images\\play.png')
+nextPh = PhotoImage(file='C:\\Users\\JAYATV\\PycharmProjects\\MusicPlayer\\Images\\next.png')
+prevPh = PhotoImage(file='C:\\Users\\JAYATV\\PycharmProjects\\MusicPlayer\\Images\\previous.png')
 
-button1=Button(bottomFrame,image=prevPh,bg='black',height=80,width=80,command=prev)
-button2=Button(bottomFrame,image=playPh,bg='black',height=80,width=80,command=start)
-button3=Button(bottomFrame,image=nextPh,bg='black',height=80,width=80,command=next)
+button1=Button(bottomFrame,image=prevPh,bg='black',height=40,width=40,command=prev)
+button2=Button(bottomFrame,image=playPh,bg='black',height=40,width=40,command=start)
+button3=Button(bottomFrame,image=nextPh,bg='black',height=40,width=40,command=next)
 button1.image=prevPh
 button2.image=playPh
 button3.image=nextPh
