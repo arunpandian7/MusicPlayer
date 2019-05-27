@@ -4,6 +4,7 @@ from tkinter import filedialog
 from tkinter import messagebox
 from os import listdir
 from os.path import  join
+import random
 
 
 playing=False
@@ -19,7 +20,9 @@ def browser():
     global file_dir
     global onlyfiles
     global player
+    global index
     try:
+        index=0
         onlyfiles=[""]
         file_dir=filedialog.askdirectory()
         player.stop()
@@ -48,6 +51,14 @@ def start():
         start()
     playing=True
     first_time=False
+    button2.configure(image=pausePh)
+def shuffling():
+    global onlyfiles
+    global index
+    random.shuffle(onlyfiles)
+#TODO Fix the next button to act as the song ends
+
+#TODO Make the shuffle as a toggle as it supposed to be
 def player_play(event=None):
     global index
     global player
@@ -111,6 +122,7 @@ playPh = PhotoImage(file='C:\\Users\\JAYATV\\PycharmProjects\\MusicPlayer\\Image
 nextPh = PhotoImage(file='C:\\Users\\JAYATV\\PycharmProjects\\MusicPlayer\\Images\\next.png')
 prevPh = PhotoImage(file='C:\\Users\\JAYATV\\PycharmProjects\\MusicPlayer\\Images\\previous.png')
 pausePh= PhotoImage(file='C:\\Users\\JAYATV\\PycharmProjects\\MusicPlayer\\Images\\pause.png')
+# TODO Add a Shuffle Button
 
 varPh=playPh
 
@@ -118,6 +130,7 @@ varPh=playPh
 button1=Button(bottomFrame,image=prevPh,bg='black',height=40,width=40,command=prev)
 button2=Button(bottomFrame,image=varPh,bg='black',height=40,width=40,command=player_play)
 button3=Button(bottomFrame,image=nextPh,bg='black',height=40,width=40,command=next)
+button4=Button(bottomFrame,text='Shuffle',bg='black',fg='grey',height=40,width=40,command=shuffling)
 button1.image=prevPh
 button2.image=varPh
 button3.image=nextPh
@@ -126,6 +139,7 @@ button3.image=nextPh
 button1.pack(side=LEFT)
 button2.pack(side=LEFT)
 button3.pack(side=LEFT)
+button4.pack(side=RIGHT)
 
 
 window.bind('<space>',player_play)
