@@ -1,6 +1,7 @@
 from vlc import MediaPlayer
 from tkinter import  *
 from tkinter import filedialog
+from tkinter import messagebox
 from os import listdir
 from os.path import  join
 
@@ -10,7 +11,7 @@ first_time=True
 window=Tk()
 
 index=0
-onlyfiles=[""]
+onlyfiles=[]
 song_name=StringVar()
 song_name.set('Choose a folder')
 
@@ -18,34 +19,46 @@ def browser():
     global file_dir
     global onlyfiles
     global player
-    onlyfiles=[""]
-    file_dir=filedialog.askdirectory()
-    player.stop()
-    onlyfiles = [f for f in listdir(file_dir) if f.endswith('.mp3')]
-    start()
-player=MediaPlayer(onlyfiles[index])
+    try:
+        onlyfiles=[""]
+        file_dir=filedialog.askdirectory()
+        player.stop()
+        onlyfiles = [f for f in listdir(file_dir) if f.endswith('.mp3')]
+        if(onlyfiles==[]):
+            raise FileNotFoundError
+        start()
+    except(FileNotFoundError):
+        if(file_dir==""):
+            pass
+        else:
+            messagebox.showinfo('Error','No MP3 in selected folder select a folder with mp3 file')
+player=MediaPlayer()
 def start():
     global index
     global player
     global song_name
     global playing
     global first_time
-    song_name.set(onlyfiles[index][:-4])
-    player=MediaPlayer(join(file_dir,onlyfiles[index]))
-    player.play()
+    try:
+        song_name.set(onlyfiles[index].replace(".mp3",""))
+        player=MediaPlayer(join(file_dir,onlyfiles[index]))
+        player.play()
+    except(IndexError):
+        index=0
+        start()
     playing=True
     first_time=False
-def player_play():
+def player_play(event=None):
     global index
     global player
     global song_name
     global playing
     global first_time
 
-    if(first_time):
+    if first_time:
         first_time=False
         start()
-    elif(playing):
+    elif playing:
         playing=False
         swap_icon(playing)
         player.pause()
@@ -69,7 +82,7 @@ def swap_icon(temp):
     global varPh
     global pausePh
     global playPh
-    if (temp):
+    if temp:
         varPh = pausePh
         button2.configure(image=varPh)
         button2.image = varPh
@@ -99,7 +112,7 @@ nextPh = PhotoImage(file='C:\\Users\\JAYATV\\PycharmProjects\\MusicPlayer\\Image
 prevPh = PhotoImage(file='C:\\Users\\JAYATV\\PycharmProjects\\MusicPlayer\\Images\\previous.png')
 pausePh= PhotoImage(file='C:\\Users\\JAYATV\\PycharmProjects\\MusicPlayer\\Images\\pause.png')
 
-varPh=PhotoImage()
+varPh=playPh
 
 
 button1=Button(bottomFrame,image=prevPh,bg='black',height=40,width=40,command=prev)
@@ -115,5 +128,6 @@ button2.pack(side=LEFT)
 button3.pack(side=LEFT)
 
 
-
+window.bind('<space>',player_play)
+window.iconbitmap('C:\\Users\\JAYATV\\PycharmProjects\\MusicPlayer\\Images\\icon.png')
 window.mainloop()
